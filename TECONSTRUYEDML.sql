@@ -118,8 +118,18 @@ VALUES
 --Faltan las compras de las etapas
 INSERT INTO COMPRA (Descripcion, Precio, Fecha_compra, Id_etapa)
 VALUES
-('Materiales preliminares',38000,'2018/6/2',1000);
-
+('Materiales preliminares',38000,'2018/6/2',1000),
+('Arena para los cimientos', 13000, '2018/6/5', 1001),
+('Piedra para los cimientos', 20000, '2018/6/5', 1001),
+('Varilla de metal para los cimientos', 30000, '2018/6/5', 1001),
+('Sacos de cemento para las paredes', 30000, '2018/6/19', 1002),
+('Blocks de concreto para las paredes', 40000, '2018/6/19', 1002),
+('Varillas de metal para las paredes', 35000, '2018/6/19', 1002),
+('Bolsas de cemento para concreto reforzado', 25000, '2018/7/1', 1003),
+('Varillas de metal para concreto reforzado', 20000, '2018/7/1', 1003),
+('Tejas para el techo', 50000, '2018/7/10', 1004),
+('Laminas de metal para el techo', 50000, '2018/7/10', 1004),
+()
 
 INSERT INTO EMPLEADOS_POR_PROYECTO --(Cedula_empleado, Id_proyecto)
 VALUES
