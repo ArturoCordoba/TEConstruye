@@ -11,7 +11,7 @@ VALUES
 ('Sandra','Casas','Herrero','616950116','83855217','Arquitecto');
 ;
 
---Agregar 15 obreros mas
+
 INSERT INTO OBRERO (Primer_nombre, Primer_apellido, Segundo_apellido, Cedula, Telefono, Pago_por_hora)
 VALUES
 ('Ricardo','Montoya','Arrieta','103202101','85878889',1000),
@@ -28,7 +28,7 @@ VALUES
 ('Adrian','Vila','Esteban','133202101','88483104',1500),
 ('Mateo','Serra','Gomez','143202101','88483205',1000),
 ('Raul','Soler','Medina','153202101','88483306',1500),
-('Antonio','Muñoz','Soto','163202101','88493407',1500)
+('Antonio','MuÃ±oz','Soto','163202101','88493407',1500)
 ;
 
 
@@ -47,12 +47,11 @@ VALUES
 ('Casa H34','Finalizado','Santa Ana','2018/6/1','116401303'),
 ('Casa L41','Pendiente','Escazu','2018/9/17','116402303'),
 ('Casa Z34','Pendiente','Tres Rios','2018/9/27','116403303'),
-('Local T32','Pendiente','San Pedro','2018/10/3','116403303'),
-('Casa F16','Pendiente','Lindora','2018/9/24','116404303'),
-('Casa B03','Pendiente','San Rafael','2018/10/10','116405303')
+('Local T32','Pendiente','San Pedro','2019/1/19','116403303'),
+('Casa F16','Pendiente','Lindora','2019/5/24','116404303'),
+('Casa B03','Pendiente','San Rafael','2019/2/10','116405303')
 ;
 
---Faltan las demas etapas de los ultimos 3 proyectos
 INSERT INTO ETAPA (Nombre, Presupuesto, Fecha_inicio, Fecha_final, Id_proyecto)
 VALUES
 ('Trabajo Preliminar',40000,'2018/6/2','2018/6/4',1000),
@@ -69,7 +68,7 @@ VALUES
 ('Instalacion Sanitaria',95000,'2018/7/18','2018/7/26',1000),
 ('Instalacion Electrica',175000,'2018/7/19','2018/7/28',1000),
 ('Puertas',135000,'2018/8/2','2018/8/4',1000),
-('Cerrajería',55000,'2018/8/3','2018/8/4',1000),
+('CerrajerÃ­a',55000,'2018/8/3','2018/8/4',1000),
 ('Ventanas',140000,'2018/8/5','2018/8/10',1000),
 ('Closets',85000,'2018/8/7','2018/8/11',1000),
 ('Mueble de Cocina',100000,'2018/8/12','2018/8/16',1000),
@@ -85,33 +84,35 @@ VALUES
 --Falta asignar precios unitarios
 INSERT INTO MATERIAL (Nombre, Precio_unitario)
 VALUES
-('Piedra'),
-('Arena'),
-('Cal'),
-('Blocks Concreto'),
-('Varilla Metal'),
-('Bolsa Cemento'),
-('Lamina Metal'),
-('Teja'),
-('Azulejos'),
-('Ceramica'),
-('Lamina Gypsum'),
-('Tubos PVC'),
-('Canoa Metal'),
-('Inodoro'),
-('Fregadero'),
-('Lavatorio'),
-('Cables'),
-('Tubo Metalico'),
-('Puerta Madera'),
-('Puerta Hierro'),
-('Llavin Hierro'),
-('Vidrio'),
-('Marco Madera'),
-('Lamina Madera'),
-('Gaveta Madera'),
-('Pintura Blanca'),
-('Pintura Beige')
+('Piedra', 200),
+('Arena', 500),
+('Cal', 100),
+('Blocks Concreto', 1000),
+('Varilla Metal', 5000),
+('Bolsa Cemento', 10000),
+('Lamina Metal', 15000),
+('Teja', 5000),
+('Azulejos', 3000),
+('Ceramica', 3000),
+('Lamina Gypsum', 10000),
+('Tubos PVC', 5000),
+('Canoa Metal', 50000),
+('Inodoro', 75000),
+('Fregadero', 40000),
+('Lavatorio', 35000),
+('Cables', 7500),
+('Tubo Metalico', 10000),
+('Puerta Madera', 50000),
+('Puerta Hierro, 60000'),
+('Llavin Hierro', 15000),
+('Vidrio', 10000),
+('Marco Madera', 8000),
+('Lamina Madera', 8000),
+('Gaveta Madera', 12000),
+('Pintura Blanca', 7000),
+('Pintura Beige', 7000),
+('Pintura Azul', 7000),
+('Pintura Cafe', 7000)
 ;
 
 --Faltan las compras de las etapas
