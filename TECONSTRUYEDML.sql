@@ -9,8 +9,8 @@ VALUES
 ('Juan','Chavarria','Rosales','416950116','85121439','Arquitecto'),
 ('Daniela','Rodriguez','Araya','516950116','87521439','Ingeniero Civil'),
 ('Sandra','Casas','Herrero','616950116','83855217','Arquitecto'),
-('Roger','Rodriguez','Rosti','116800684','85693147','Administrador de Empresas'),
-('Gerardo','MuÃ±oz','Artavia','782950458','88921245','Ingeniero en Construccion')
+('Roger','Rodriguez','Rosti','116800684','85693147','Administrador'),
+('Gerardo','Muñoz','Artavia','782950458','88921245','Ingeniero Construccion')
 ;
 
 
@@ -30,7 +30,7 @@ VALUES
 ('Adrian','Vila','Esteban','133202101','88483104',1500),
 ('Mateo','Serra','Gomez','143202101','88483205',1000),
 ('Raul','Soler','Medina','153202101','88483306',1500),
-('Antonio','MuÃ±oz','Soto','163202101','88493407',1500)
+('Antonio','Muñoz','Soto','163202101','88493407',1500)
 ;
 
 
@@ -54,33 +54,39 @@ VALUES
 ('Casa B03','Pendiente','San Rafael','2019/2/10','116405303')
 ;
 
-INSERT INTO ETAPA (Nombre, Presupuesto, Fecha_inicio, Fecha_final, Id_proyecto)
+INSERT INTO ETAPA (Nombre, Fecha_inicio, Fecha_final, Id_proyecto)
 VALUES
-('Trabajo Preliminar',40000,'2018/6/2','2018/6/4',1000),
-('Cimientos',350000,'2018/6/5','2018/6/18',1000),
-('Paredes',1500000,'2018/6/19','2018/6/30',1000),
-('Concreto Reforzado',55000,'2018/7/1','2018/7/9',1000),
-('Techos',250000,'2018/7/10','2018/7/15',1000),
-('Cielos',135000,'2018/7/16','2018/7/21',1000),
-('Repello',45000,'2018/7/22','2018/7/25',1000),
-('Entrepisos',50000,'2018/7/26','2018/7/31',1000),
-('Pisos',125000,'2018/7/27','2018/8/1',1000),
-('Enchapes',60000,'2018/7/25','2018/7/31',1000),
-('Instalacion Pluvial',105000,'2018/7/17','2018/7/25',1000),
-('Instalacion Sanitaria',95000,'2018/7/18','2018/7/26',1000),
-('Instalacion Electrica',175000,'2018/7/19','2018/7/28',1000),
-('Puertas',135000,'2018/8/2','2018/8/4',1000),
-('CerrajerÃ­a',55000,'2018/8/3','2018/8/4',1000),
-('Ventanas',140000,'2018/8/5','2018/8/10',1000),
-('Closets',85000,'2018/8/7','2018/8/11',1000),
-('Mueble de Cocina',100000,'2018/8/12','2018/8/16',1000),
-('Pintura',75000,'2018/8/17','2018/8/23',1000),
-('Escaleras',105000,'2018/7/11','2018/7/19',1000),
-('Trabajo Preliminar',45000,'2018/9/18','2018/9/20',1001),
-('Cimientos',80000,'2018/9/21','2018/10/5',1001),
-('Paredes',165000,'2018/10/6','2018/10/18',1001),
-('Trabajo Preliminar',35000,'2018/9/28','2018/9/30',1002),
-('Cimientos',70000,'2018/10/1','2018/10/13',1002)
+
+--Etapas del proyecto 1000
+('Trabajo Preliminar', '2018/6/2','2018/6/4',1000),
+('Cimientos','2018/6/5','2018/6/18',1000),
+('Paredes','2018/6/19','2018/6/30',1000),
+('Concreto Reforzado','2018/7/1','2018/7/9',1000),
+('Techos','2018/7/10','2018/7/15',1000),
+('Cielos','2018/7/16','2018/7/21',1000),
+('Repello','2018/7/22','2018/7/25',1000),
+('Entrepisos','2018/7/26','2018/7/31',1000),
+('Pisos','2018/7/27','2018/8/1',1000),
+('Enchapes','2018/7/25','2018/7/31',1000),
+('Instalacion Pluvial','2018/7/17','2018/7/25',1000),
+('Instalacion Sanitaria','2018/7/18','2018/7/26',1000),
+('Instalacion Electrica','2018/7/19','2018/7/28',1000),
+('Puertas','2018/8/2','2018/8/4',1000),
+('Cerrajería','2018/8/3','2018/8/4',1000),
+('Ventanas','2018/8/5','2018/8/10',1000),
+('Closets','2018/8/7','2018/8/11',1000),
+('Mueble de Cocina','2018/8/12','2018/8/16',1000),
+('Pintura','2018/8/17','2018/8/23',1000),
+('Escaleras','2018/7/11','2018/7/19',1000),
+
+--Etapas del proyecto 1001
+('Trabajo Preliminar','2018/9/18','2018/9/20',1001),
+('Cimientos','2018/9/21','2018/10/5',1001),
+('Paredes','2018/10/6','2018/10/18',1001),
+
+--Etapas de proyecto 1002
+('Trabajo Preliminar','2018/9/28','2018/9/30',1002),
+('Cimientos','2018/10/1','2018/10/13',1002)
 ;
 
 INSERT INTO MATERIAL (Nombre, Precio_unitario)
@@ -121,7 +127,7 @@ VALUES
 ('Administrador'),
 ('Ingeniero'),
 ('Arquitecto')
-
+;
 
 INSERT INTO ROL_POR_EMPLEADO(Id_empleado,Id_rol)
 VALUES
@@ -134,103 +140,196 @@ VALUES
 ('616950116',3),
 ('782950458',2),
 ('782950458',1)
+;
 
-
-INSERT INTO COMPRA (Descripcion, Precio, Fecha_compra, Lugar_compra, Cantidad, Id_etapa, Id_material)
+INSERT INTO COMPRA (Descripcion, Precio, Fecha_compra, Lugar_compra, Id_etapa, Id_material)
 VALUES
 
 --Etapa Cimientos del proyecto 1000
-('Piedra para los cimientos',25000,'2018/6/5','Las Gravilias',125,1001, 1000),
-('Cemento para los cimientos', 100000, '2018/6/5','Las Gravilias',10,1001,1005),
-('Varilla de metal para los cimientos', 100000, '2018/6/5','Las Gravilias', 20, 1001,1004),
-('Arena para los cimientos',25000,'2018/6/5','Las Gravilias',50,1001,1001),
-('Tubos metalicos para los cimientos',50000,'2018/6/5','Las Gravilias', 5,1001,1017),
+('Piedra para los cimientos',25000,'2018/6/5','Las Gravilias',1001, 1000),
+('Cemento para los cimientos', 100000, '2018/6/5','Las Gravilias',1001,1005),
+('Varilla de metal para los cimientos', 100000, '2018/6/5','Las Gravilias',1001,1004),
+('Arena para los cimientos',25000,'2018/6/5','Las Gravilias',1001,1001),
+('Tubos metalicos para los cimientos',50000,'2018/6/5','Las Gravilias',1001,1017),
 
 --Etapa paredes del proyecto 1000
-('Blocks de concreto para las paredes',500000,'2018/6/19','Las Gravilias',500,1002,1003),
-('Varilla de metal para las paredes', 350000,'2018/6/19','Las Gravilias', 70,1002,1004),
-('Bolsas de cemento para las paredes',325000,'2018/6/19','Las Gravilias',325,1002,1005),
-('Tubos metalicos para cableado', 100000,'2018/6/19','Las Gravilias',10,1002,1017),
-('Lamina Gypsum para las paredes del cobertizo', 300000,'2018/6/19','Las Gravilias',30, 1002,1010),
+('Blocks de concreto para las paredes',500000,'2018/6/19','Las Gravilias',1002,1003),
+('Varilla de metal para las paredes', 350000,'2018/6/19','Las Gravilias',1002,1004),
+('Bolsas de cemento para las paredes',325000,'2018/6/19','Las Gravilias',1002,1005),
+('Tubos metalicos para cableado', 100000,'2018/6/19','Las Gravilias',1002,1017),
+('Lamina Gypsum para las paredes del cobertizo', 300000,'2018/6/19','Las Gravilias',1002,1010),
 
---Etapa concreto reforzado del proyecto 100
-('Block de concreto para el concreto reforzado', 60000,'2018/7/1','Las Gravilias',60,1003,1003),
+--Etapa concreto reforzado del proyecto 1000
+('Block de concreto para el concreto reforzado', 60000,'2018/7/1','Las Gravilias',1003,1003),
 
 --Etapa techos del proyecto 1000
-('Laminas de metal para el techo',150000,'2018/7/10','Las Gravilias',10,1004,1006),
-('Tejas para el techo',90000,'2018/7/10','Las Gravilias',180,1004,1007),
+('Laminas de metal para el techo',150000,'2018/7/10','Las Gravilias',1004,1006),
+('Tejas para el techo',90000,'2018/7/10','Las Gravilias',1004,1007),
 
 --Etapa cielos del proyecto 1000
-('Cables electricos', 60000,'2018/7/16','Las Gravilias',8,1005,1016),
-('Lamina Madera',96000,'2018/7/16','Las Gravilias',12,1005,1023),
+('Cables electricos', 60000,'2018/7/16','Las Gravilias',1005,1016),
+('Lamina Madera',96000,'2018/7/16','Las Gravilias',1005,1023),
 
 --Etapa repello del proyecto 1000
-('Pintura blanca para el repello',42000,'2018/7/22','Las Gravilias',6,1006,1025),
+('Pintura blanca para el repello',42000,'2018/7/22','Las Gravilias',1006,1025),
 
 --Etapa entrepisos del proyecto 1000
-('Laminas de madera para los entrepisos',64000,'2018/7/26','Las Gravilias',8,1007,1023),
+('Laminas de madera para los entrepisos',64000,'2018/7/26','Las Gravilias',1007,1023),
 
 --Etapa pisos del proyecto 1000
-('Ceramica para el piso', 96000,'2018/7/27','Las Gravilias', 32,1008,1009),
-('Cemento para el piso', 30000,'2018/7/27','Las Gravilias',3,1008,1005),
+('Ceramica para el piso', 96000,'2018/7/27','Las Gravilias',1008,1009),
+('Cemento para el piso', 30000,'2018/7/27','Las Gravilias',1008,1005),
 
 --Etapa enchapes del proyecto 1000
-('Cemento para los enchapes',30000,'2018-07-25','Las Gravilias',3,1009,1005),
-('Arena para los enchapes', 20000,'2018-07-25','Las Gravilias',40,1009,1001),
-('Azulejos para los enchapes',30000,'2018-07-25','Las Gravilias',10,1009,1008),
+('Cemento para los enchapes',30000,'2018-07-25','Las Gravilias',1009,1005),
+('Arena para los enchapes', 20000,'2018-07-25','Las Gravilias',1009,1001),
+('Azulejos para los enchapes',30000,'2018-07-25','Las Gravilias',1009,1008),
 
 --Etapa instalacion pluvial del proyecto 1000
-('Tubos PVC para la instalacion pluvial',50000,'2018-07-17','Las Gravilias',10,1010,1011),
-('Canoas para la instalaciÃ³n pluvial',60000,'2018-07-17','Las Gravilias',3,1010,1012),
+('Tubos PVC para la instalacion pluvial',50000,'2018-07-17','Las Gravilias',1010,1011),
+('Canoas para la instalación pluvial',60000,'2018-07-17','Las Gravilias',1010,1012),
 
 --Etapa instalacion sanitaria del proyecto 1000
-('Inodoro para la instalacion sanitaria',12000,'2018-07-18','Las Gravilas',1,1011,1013),
-('Lavatorio para instalacion sanitaria',15000,'2018-07-18','Las Gravilias',1,1011,1015),
-('Tubos para la instalacion sanitaria',25000,'2018-07-18','Las Gravilias',5,1011,1011),
-('Azulejos para la instalacion sanitaria',15000,'2018-07-18','Las Gravilias',5,1011,1008),
-('Cemento para la instalacion pluvial',30000,'2018-07-18','Las Gravilias',3,1011,1005),
+('Inodoro para la instalacion sanitaria',12000,'2018-07-18','Las Gravilas',1011,1013),
+('Lavatorio para instalacion sanitaria',15000,'2018-07-18','Las Gravilias',1011,1015),
+('Tubos para la instalacion sanitaria',25000,'2018-07-18','Las Gravilias',1011,1011),
+('Azulejos para la instalacion sanitaria',15000,'2018-07-18','Las Gravilias',1011,1008),
+('Cemento para la instalacion pluvial',30000,'2018-07-18','Las Gravilias',1011,1005),
 
 --Etapa instalacion electrica del proyecto 1000
-('Cables para la instalacion electrica',180000,'2018-07-19','Las Gravilias',24,1012,1016),
+('Cables para la instalacion electrica',180000,'2018-07-19','Las Gravilias',1012,1016),
 
 --Etapa puertas del proyecto 1000
-('Puertas necesarias para dejar todo cerrado',100000,'2018-08-02','Las Gravilias',2,1013,1018),
+('Puertas necesarias para dejar todo cerrado',100000,'2018-08-02','Las Gravilias',1013,1018),
 
 --Etapa Cerrajeria del proyecto 1000
-('Llavines para las puertas',60000,'2018-08-03','Las Gravilias',4,1014,1020),
+('Llavines para las puertas',60000,'2018-08-03','Las Gravilias',1014,1020),
 
 --Etapa ventanas del proyecto 1000
-('Marcos de madera para las ventanas',32000,'2018-08-05','Las Gravilias',4,1015,1022),
-('Vidrios para las ventanas',100000,'2018-08-05','Las Gravilias',10,1015,1021),
+('Marcos de madera para las ventanas',32000,'2018-08-05','Las Gravilias',1015,1022),
+('Vidrios para las ventanas',100000,'2018-08-05','Las Gravilias',1015,1021),
 
 --Etapa closets del proyecto 1000
-('Laminas de madera para el closet',80000,'2018-08-07','Las Gravilias',10,1016,1023),
+('Laminas de madera para el closet',80000,'2018-08-07','Las Gravilias',1016,1023),
 
 --Etapa mueble cocina del proyecto 1000
-('Block de concreto para el mueble cocina',25000,'2018-08-12','Las Gravilias',25,1017,1003),
-('Cemento para el mueble cocina',20000,'2018-08-12','Las Gravilias',2,1017,1005),
-('Ceramica para el mueble cocina',45000,'2018-08-12','Las Gravilias',15,1017,1009),
+('Block de concreto para el mueble cocina',25000,'2018-08-12','Las Gravilias',1017,1003),
+('Cemento para el mueble cocina',20000,'2018-08-12','Las Gravilias',1017,1005),
+('Ceramica para el mueble cocina',45000,'2018-08-12','Las Gravilias',1017,1009),
 
 --Etapa pintura del proyecto 1000
-('Pintura blanca',28000,'2018-08-17','Las Gravilias',4,1018,1025),
-('Pintura beige',28000,'2018-08-17','Las Gravilias',4,1018,1026),
-('Pintura cafe',28000,'2018-08-17','Las Gravilias',4,1018,1028),
+('Pintura blanca',28000,'2018-08-17','Las Gravilias',1018,1025),
+('Pintura beige',28000,'2018-08-17','Las Gravilias',1018,1026),
+('Pintura cafe',28000,'2018-08-17','Las Gravilias',1018,1028),
 
 --Etapa escaleras del proyecto 1000
-('Laminas de madera para las escaleras',72000,'2018-07-11','Las Gravilias',9,1019,1023),
+('Laminas de madera para las escaleras',72000,'2018-07-11','Las Gravilias',1019,1023),
 
 --Etapa Cimientos preliminar del proyecto 1001
-('Bolsas de cemento para los cimientos',80000,'2018-09-21','Las Gravilias',8,1021,1005),
+('Bolsas de cemento para los cimientos',80000,'2018-09-21','Las Gravilias',1021,1005),
 
 --Etapa paredes del proyecto 1001
-('Blocks para las paredes',50000,'2018-10-06','Las Gravilias',50,1022,1003),
-('Cemento para las paredes',60000,'2018-10-06','Las Gravilias',6,1022,1005),
+('Blocks para las paredes',50000,'2018-10-06','Las Gravilias',1022,1003),
+('Cemento para las paredes',60000,'2018-10-06','Las Gravilias',1022,1005),
 
 --Etapa Cimientos preliminar del proyecto 1001
-('Bolsas de cemento para los cimientos',80000,'2018-09-21','Las Gravilias',8,1024,1005)
+('Bolsas de cemento para los cimientos',80000,'2018-09-21','Las Gravilias',1024,1005)
 
+INSERT INTO MATERIAL_POR_ETAPA (Codigo_Material, Id_etapa, Cantidad)
+VALUES
 
-INSERT INTO EMPLEADO_POR_PROYECTO --(Cedula_empleado, Id_proyecto)
+--Etapa Cimientos del proyecto 1000
+(1000,1001,130),
+(1005,1001,15),
+(1004,1001,20),
+(1001,1001,60),
+(1017,1001,5),
+
+--Etapa paredes del proyecto 1000
+(1003,1002,500),
+(1004,1002,65),
+(1005,1002,30),
+(1017,1002,10),
+(1010,1002,25),
+
+--Etapa concreto reforzado del proyecto 1000
+(1003,1003,55),
+
+--Etapa techos del proyecto 1000
+(1006,1004,15),
+(1007,1004,180),
+
+--Etapa cielos del proyecto 1000
+(1016,1005,10),
+(1023,1005,12),
+
+--Etapa repello del proyecto 1000
+(1025,1006,7),
+
+--Etapa entrepisos del proyecto 1000
+(1023,1007,10),
+
+--Etapa pisos del proyecto 1000
+(1009,1008,32),
+(1005,1008,5),
+
+--Etapa enchapes del proyecto 1000
+(1005,1009,5),
+(1001,1009,40),
+(1008,1009,10),
+
+--Etapa instalacion pluvial del proyecto 1000
+(1011,1010,10),
+(1012,1010,5),
+
+--Etapa instalacion sanitaria del proyecto 1000
+(1013,1011,1),
+(1015,1011,1),
+(1011,1011,5),
+(1008,1011,5),
+(1005,1011,5),
+
+--Etapa instalacion electrica del proyecto 1000
+(1016,1012,24),
+
+--Etapa puertas del proyecto 1000
+(1018,1013,2),
+
+--Etapa Cerrajeria del proyecto 1000
+(1020,1014,4),
+
+--Etapa ventanas del proyecto 1000
+(1022,1015,4),
+(1021,1015,10),
+
+--Etapa closets del proyecto 1000
+(1023,1016,10),
+
+--Etapa mueble cocina del proyecto 1000
+(1003,1017,25),
+(1005,1017,5),
+(1009,1017,15),
+
+--Etapa pintura del proyecto 1000
+(1025,1018,3),
+(1026,1018,4),
+(1028,1018,3),
+
+--Etapa escaleras del proyecto 1000
+(1023,1019,8),
+
+--Etapa Cimientos preliminar del proyecto 1001
+(1005,1021,10),
+
+--Etapa paredes del proyecto 1001
+(1003,1022,50),
+(1005,1022,5),
+
+--Etapa Cimientos preliminar del proyecto 1001
+(1005,1024,8)
+;
+
+INSERT INTO EMPLEADO_POR_PROYECTO (Cedula_empleado, Id_proyecto)
 VALUES
 ('116950116',1000),
 ('216950116',1000),
@@ -246,109 +345,108 @@ VALUES
 ('216950116',1005)
 ;
 
---Faltaria agregar las semanas de los otros 15 obreros o eliminamos 3 proyectos? porque ya es mucho jaja
-INSERT INTO OBRERO_POR_PROYECTO (Cedula_obrero, Id_proyecto, Numero_semana, Horas_laboradas)
+INSERT INTO OBRERO_POR_PROYECTO (Cedula_obrero, Id_proyecto, Semana, Horas_laboradas)
 VALUES
-('103202101',1000,1,37),
-('203202101',1000,1,34),
-('303202101',1000,1,33),
-('403202101',1000,1,32),
-('503202101',1000,1,36),
-('103202101',1000,2,35),
-('203202101',1000,2,35),
-('303202101',1000,2,31),
-('403202101',1000,2,33),
-('503202101',1000,2,35),
-('103202101',1000,3,37),
-('203202101',1000,3,34),
-('303202101',1000,3,33),
-('403202101',1000,3,32),
-('503202101',1000,3,36),
-('103202101',1000,4,35),
-('203202101',1000,4,35),
-('303202101',1000,4,31),
-('403202101',1000,4,33),
-('503202101',1000,4,35),
-('103202101',1000,5,37),
-('203202101',1000,5,34),
-('303202101',1000,5,33),
-('403202101',1000,5,32),
-('503202101',1000,5,36),
-('103202101',1000,6,35),
-('203202101',1000,6,35),
-('303202101',1000,6,31),
-('403202101',1000,6,33),
-('503202101',1000,6,35),
-('103202101',1000,7,37),
-('203202101',1000,7,34),
-('303202101',1000,7,33),
-('403202101',1000,7,32),
-('503202101',1000,7,36),
-('103202101',1000,8,35),
-('203202101',1000,8,35),
-('303202101',1000,8,31),
-('403202101',1000,8,33),
-('503202101',1000,8,35),
-('103202101',1000,9,37),
-('203202101',1000,9,34),
-('303202101',1000,9,33),
-('403202101',1000,9,32),
-('503202101',1000,9,36),
-('103202101',1000,10,35),
-('203202101',1000,10,35),
-('303202101',1000,10,31),
-('403202101',1000,10,33),
-('503202101',1000,10,35),
-('103202101',1000,11,37),
-('203202101',1000,11,34),
-('303202101',1000,11,33),
-('403202101',1000,11,32),
-('503202101',1000,11,36),
-('103202101',1000,12,28),
-('203202101',1000,12,27),
-('303202101',1000,12,26),
-('403202101',1000,12,28),
-('503202101',1000,12,29),
-('603202101',1001,1,28),
-('703202101',1001,1,27),
-('803202101',1001,1,26),
-('903202101',1001,1,28),
-('113202101',1001,1,29),
-('603202101',1000,2,35),
-('703202101',1000,2,35),
-('803202101',1000,2,31),
-('903202101',1000,2,33),
-('113202101',1000,2,35),
-('603202101',1000,3,37),
-('703202101',1000,3,34),
-('803202101',1000,3,33),
-('903202101',1000,3,32),
-('113202101',1000,3,36),
-('603202101',1000,4,35),
-('703202101',1000,4,35),
-('803202101',1000,4,31),
-('903202101',1000,4,33),
-('113202101',1000,4,35),
-('603202101',1001,5,28),
-('703202101',1001,5,27),
-('803202101',1001,5,26),
-('903202101',1001,5,28),
-('113202101',1001,5,29),
-('123202101',1002,1,28),
-('133202101',1001,1,27),
-('143202101',1001,1,26),
-('153202101',1001,1,28),
-('163202101',1001,1,29),
-('123202101',1000,2,35),
-('133202101',1000,2,35),
-('143202101',1000,2,31),
-('153202101',1000,2,33),
-('163202101',1000,2,35),
-('123202101',1002,3,28),
-('133202101',1001,3,27),
-('143202101',1001,3,26),
-('153202101',1001,3,28),
-('163202101',1001,3,29)
+('103202101',1000,'2018/6/4',37),
+('203202101',1000,'2018/6/4',34),
+('303202101',1000,'2018/6/4',33),
+('403202101',1000,'2018/6/4',32),
+('503202101',1000,'2018/6/4',36),
+('103202101',1000,'2018/6/11',35),
+('203202101',1000,'2018/6/11',35),
+('303202101',1000,'2018/6/11',31),
+('403202101',1000,'2018/6/11',33),
+('503202101',1000,'2018/6/11',35),
+('103202101',1000,'2018/6/18',37),
+('203202101',1000,'2018/6/18',34),
+('303202101',1000,'2018/6/18',33),
+('403202101',1000,'2018/6/18',32),
+('503202101',1000,'2018/6/18',36),
+('103202101',1000,'2018/6/25',35),
+('203202101',1000,'2018/6/25',35),
+('303202101',1000,'2018/6/25',31),
+('403202101',1000,'2018/6/25',33),
+('503202101',1000,'2018/6/25',35),
+('103202101',1000,'2018/7/2',37),
+('203202101',1000,'2018/7/2',34),
+('303202101',1000,'2018/7/2',33),
+('403202101',1000,'2018/7/2',32),
+('503202101',1000,'2018/7/2',36),
+('103202101',1000,'2018/7/9',35),
+('203202101',1000,'2018/7/9',35),
+('303202101',1000,'2018/7/9',31),
+('403202101',1000,'2018/7/9',33),
+('503202101',1000,'2018/7/9',35),
+('103202101',1000,'2018/7/16',37),
+('203202101',1000,'2018/7/16',34),
+('303202101',1000,'2018/7/16',33),
+('403202101',1000,'2018/7/16',32),
+('503202101',1000,'2018/7/16',36),
+('103202101',1000,'2018/7/23',35),
+('203202101',1000,'2018/7/23',35),
+('303202101',1000,'2018/7/23',31),
+('403202101',1000,'2018/7/23',33),
+('503202101',1000,'2018/7/23',35),
+('103202101',1000,'2018/7/30',37),
+('203202101',1000,'2018/7/30',34),
+('303202101',1000,'2018/7/30',33),
+('403202101',1000,'2018/7/30',32),
+('503202101',1000,'2018/7/30',36),
+('103202101',1000,'2018/8/6',35),
+('203202101',1000,'2018/8/6',35),
+('303202101',1000,'2018/8/6',31),
+('403202101',1000,'2018/8/6',33),
+('503202101',1000,'2018/8/6',35),
+('103202101',1000,'2018/8/13',37),
+('203202101',1000,'2018/8/13',34),
+('303202101',1000,'2018/8/13',33),
+('403202101',1000,'2018/8/13',32),
+('503202101',1000,'2018/8/13',36),
+('103202101',1000,'2018/8/20',28),
+('203202101',1000,'2018/8/20',27),
+('303202101',1000,'2018/8/20',26),
+('403202101',1000,'2018/8/20',28),
+('503202101',1000,'2018/8/20',29),
+('603202101',1001,'2018/9/17',28),
+('703202101',1001,'2018/9/17',27),
+('803202101',1001,'2018/9/17',26),
+('903202101',1001,'2018/9/17',28),
+('113202101',1001,'2018/9/17',29),
+('603202101',1001,'2018/9/24',35),
+('703202101',1001,'2018/9/24',35),
+('803202101',1001,'2018/9/24',31),
+('903202101',1001,'2018/9/24',33),
+('113202101',1001,'2018/9/24',35),
+('603202101',1001,'2018/10/1',37),
+('703202101',1001,'2018/10/1',34),
+('803202101',1001,'2018/10/1',33),
+('903202101',1001,'2018/10/1',32),
+('113202101',1001,'2018/10/1',36),
+('603202101',1001,'2018/10/8',35),
+('703202101',1001,'2018/10/8',35),
+('803202101',1001,'2018/10/8',31),
+('903202101',1001,'2018/10/8',33),
+('113202101',1001,'2018/10/8',35),
+('603202101',1001,'2018/10/15',28),
+('703202101',1001,'2018/10/15',27),
+('803202101',1001,'2018/10/15',26),
+('903202101',1001,'2018/10/15',28),
+('113202101',1001,'2018/10/15',29),
+('123202101',1002,'2018/9/24',8),
+('133202101',1002,'2018/9/24',5),
+('143202101',1002,'2018/9/24',6),
+('153202101',1002,'2018/9/24',6),
+('163202101',1002,'2018/9/24',7),
+('123202101',1002,'2018/10/1',35),
+('133202101',1002,'2018/10/1',35),
+('143202101',1002,'2018/10/1',31),
+('153202101',1002,'2018/10/1',33),
+('163202101',1002,'2018/10/1',35),
+('123202101',1002,'2018/10/8',28),
+('133202101',1002,'2018/10/8',27),
+('143202101',1002,'2018/10/8',26),
+('153202101',1002,'2018/10/8',28),
+('163202101',1002,'2018/10/8',29)
 ;
 
 
@@ -374,3 +472,5 @@ SELECT * FROM OBRERO_POR_PROYECTO;
 --DELETE FROM OBRERO_POR_PROYECTO;
 SELECT * FROM ROL_POR_EMPLEADO;
 --DELETE FROM ROL_POR_EMPLEADO;
+SELECT * FROM MATERIAL_POR_ETAPA;
+--DELETE FROM MATERIAL_POR_ETAPA;
