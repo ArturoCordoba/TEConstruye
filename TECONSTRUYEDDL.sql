@@ -56,7 +56,6 @@ CREATE TABLE PROYECTO
 CREATE TABLE ETAPA
 	(Nombre				varchar(30)			NOT NULL,
 	Id					int					NOT NULL		IDENTITY(1000,1),
-	Presupuesto			DECIMAL(15,1)		NOT NULL,
 	Fecha_inicio		DATE,
 	Fecha_final			DATE,
 	Id_proyecto			int					NOT NULL,
@@ -79,7 +78,7 @@ CREATE TABLE COMPRA
 	Precio				DECIMAL(10,1)		NOT NULL,
 	Fecha_compra		DATE,
 	Lugar_compra		varchar(30),
-	Cantidad			int					NOT NULL,		
+	--Cantidad			int					NOT NULL,		
 	Id					int					NOT NULL		IDENTITY(1000,1),
 	Id_etapa			int					NOT NULL,	
 	Id_material			int					NOT NULL,		
@@ -113,9 +112,17 @@ CREATE TABLE OBRERO_POR_PROYECTO
 	(Cedula_obrero		char(9)				NOT NULL,
 	Id_proyecto			int					NOT NULL,
 	Horas_laboradas		DECIMAL(4,1)		NOT NULL,
-	Numero_semana		int					NOT NULL,
+	Semana				date				NOT NULL,
 
-	PRIMARY KEY(Cedula_obrero, Id_proyecto, Numero_semana)
+	PRIMARY KEY(Cedula_obrero, Id_proyecto, Semana)
+	);
+
+CREATE TABLE MATERIAL_POR_ETAPA
+	(Codigo_material	int					NOT NULL,
+	Id_etapa			int					NOT NULL,
+	Cantidad			int					NOT NULL,
+
+	PRIMARY KEY(Codigo_material,Id_etapa)
 	);
 
 
@@ -139,8 +146,65 @@ ALTER TABLE EMPLEADO_POR_PROYECTO
 
 ALTER TABLE OBRERO_POR_PROYECTO
 	ADD FOREIGN KEY (Cedula_obrero) REFERENCES OBRERO(CEDULA),
-		FOREIGN KEY (Id_proyecto) REFERENCES PROYECTO(Id) 
+		FOREIGN KEY (Id_proyecto) REFERENCES PROYECTO(Id)
 
+ALTER TABLE MATERIAL_POR_ETAPA
+	ADD FOREIGN KEY (Codigo_material) REFERENCES MATERIAL(Codigo),
+		FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
+/*
+GO
+CREATE PROCEDURE dbo.Presupuesto
+AS
+
+GO
+--DROP PROC Presupuesto;
+Presupuesto;
+*/
+
+GO
+CREATE PROCEDURE dbo.Planilla
+AS
+SELECT
+  OBRERO.Primer_nombre AS [Primer Nombre],
+  OBRERO.Primer_apellido AS [Primer Apellido],
+  OBRERO.Segundo_apellido AS [Segundo Apellido],
+  OBRERO.Pago_por_hora AS [Pago Hora],
+  OBRERO.Cedula AS [Cedula Obrero],
+  OBRERO_POR_PROYECTO.Horas_laboradas AS [Horas Laboradas],
+  OBRERO_POR_PROYECTO.Semana,
+  PROYECTO.Nombre AS [Nombre Proyecto],
+  OBRERO_POR_PROYECTO.Horas_laboradas*OBRERO.Pago_por_hora AS [Total]
+FROM
+  OBRERO_POR_PROYECTO
+  INNER JOIN OBRERO
+    ON OBRERO_POR_PROYECTO.Cedula_obrero = OBRERO.Cedula
+  INNER JOIN PROYECTO
+    ON OBRERO_POR_PROYECTO.Id_proyecto = PROYECTO.Id
+GO
+--DROP PROC Planilla;
+--Planilla;
+
+GO
+CREATE PROCEDURE dbo.Gastos
+AS
+SELECT
+  COMPRA.Precio AS [Monto],
+  DATEADD(wk,DATEDIFF(wk,0,Compra.Fecha_compra),0) AS [Semana],
+  COMPRA.Lugar_compra AS [Lugar Compra],
+  COMPRA.Fecha_compra AS [Fecha Compra],
+  ETAPA.Nombre AS [Nombre Etapa],
+  COMPRA.Id AS [Id Compra],
+  PROYECTO.Nombre AS [Nombre Proyecto],
+  PROYECTO.Id AS [Id Proyecto]
+FROM
+  ETAPA
+  INNER JOIN COMPRA
+    ON ETAPA.Id = COMPRA.Id_etapa
+  INNER JOIN PROYECTO
+    ON ETAPA.Id_proyecto = PROYECTO.Id
+GO
+--DROP PROC Gastos;
+--Gastos;
 
 /*USE master
 GO
