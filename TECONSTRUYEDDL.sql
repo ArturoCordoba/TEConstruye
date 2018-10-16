@@ -77,7 +77,8 @@ CREATE TABLE COMPRA
 	(Descripcion		varchar(50)			NOT NULL,
 	Precio				DECIMAL(10,1)		NOT NULL,
 	Fecha_compra		DATE,
-	Lugar_compra		varchar(30),	
+	Lugar_compra		varchar(30),
+	--Cantidad			int					NOT NULL,		
 	Id					int					NOT NULL		IDENTITY(1000,1),
 	Id_etapa			int					NOT NULL,	
 	Id_material			int					NOT NULL,		
@@ -150,15 +151,28 @@ ALTER TABLE OBRERO_POR_PROYECTO
 ALTER TABLE MATERIAL_POR_ETAPA
 	ADD FOREIGN KEY (Codigo_material) REFERENCES MATERIAL(Codigo),
 		FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
-/*
+
 GO
 CREATE PROCEDURE dbo.Presupuesto
 AS
-
+SELECT
+  MATERIAL.Nombre AS [Nombre Material],
+  MATERIAL_POR_ETAPA.Cantidad AS [Cantidad Material],
+  MATERIAL.Precio_unitario [Precio Unitario],
+  MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario AS [Total],
+  ETAPA.Nombre AS [Nombre Etapa],
+  PROYECTO.Nombre AS [Nombre Proyecto]
+FROM
+  MATERIAL_POR_ETAPA
+  INNER JOIN MATERIAL
+    ON MATERIAL_POR_ETAPA.Codigo_material = MATERIAL.Codigo
+  INNER JOIN ETAPA
+    ON MATERIAL_POR_ETAPA.Id_etapa = ETAPA.Id
+  INNER JOIN PROYECTO
+    ON ETAPA.Id_proyecto = PROYECTO.Id
 GO
 --DROP PROC Presupuesto;
-Presupuesto;
-*/
+--Presupuesto;
 
 GO
 CREATE PROCEDURE dbo.Planilla
@@ -204,6 +218,31 @@ FROM
 GO
 --DROP PROC Gastos;
 --Gastos;
+
+GO
+CREATE PROCEDURE dbo.Estado
+AS
+SELECT
+  ETAPA.Nombre AS [Nombre Etapa],
+  MATERIAL.Precio_unitario,
+  MATERIAL_POR_ETAPA.Cantidad,
+  MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario AS [Presupuesto],
+  COMPRA.Precio AS [Gasto Real],
+  (MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario)-COMPRA.Precio AS [Diferencia],
+  PROYECTO.Nombre AS [Nombre Proyecto]
+FROM
+  ETAPA
+  INNER JOIN PROYECTO
+    ON ETAPA.Id_proyecto = PROYECTO.Id
+  INNER JOIN MATERIAL_POR_ETAPA
+    ON ETAPA.Id = MATERIAL_POR_ETAPA.Id_etapa
+  INNER JOIN MATERIAL
+    ON MATERIAL_POR_ETAPA.Codigo_material = MATERIAL.Codigo
+  INNER JOIN COMPRA
+    ON ETAPA.Id = COMPRA.Id_etapa AND MATERIAL.Codigo = COMPRA.Id_material
+GO
+--DROP PROC Estado;
+--Estado;
 
 /*USE master
 GO
