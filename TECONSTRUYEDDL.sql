@@ -1,6 +1,11 @@
 CREATE DATABASE TECONSTRUYE
 GO
 
+/*USE master
+GO
+DROP DATABASE TECONSTRUYE
+GO*/
+
 USE TECONSTRUYE
 GO
 
@@ -24,7 +29,7 @@ CREATE TABLE OBRERO
 	Segundo_apellido	varchar(20)			NOT NULL,
 	Cedula				char(9)				NOT NULL,
 	Telefono			char(8),
-	Pago_por_hora		DECIMAL(8,1)		NOT NULL,
+	Pago_por_hora		decimal(8,1)		NOT NULL,
 
 	PRIMARY KEY(Cedula)
 	);
@@ -46,7 +51,7 @@ CREATE TABLE PROYECTO
 	Estado				varchar(10),
 	Id					int					NOT NULL		IDENTITY(1000, 1),	
 	Ubicacion			varchar(40)			NOT NULL,
-	Fecha_inicio		DATE,
+	Fecha_inicio		date,
 	Cedula_cliente		char(9)				NOT NULL,
 
 	PRIMARY KEY(Id)
@@ -55,9 +60,10 @@ CREATE TABLE PROYECTO
 
 CREATE TABLE ETAPA
 	(Nombre				varchar(30)			NOT NULL,
+	Descripcion			varchar(100),
 	Id					int					NOT NULL		IDENTITY(1000,1),
-	Fecha_inicio		DATE,
-	Fecha_final			DATE,
+	Fecha_inicio		date,
+	Fecha_final			date,
 	Id_proyecto			int					NOT NULL,
 
 	PRIMARY KEY(Id)
@@ -67,7 +73,7 @@ CREATE TABLE ETAPA
 CREATE TABLE MATERIAL
 	(Nombre				varchar(20)			NOT NULL,
 	Codigo				int					NOT NULL		IDENTITY(1000,1),
-	Precio_unitario		DECIMAL(10,1)		NOT NULL,
+	Precio_unitario		decimal(10,1)		NOT NULL,
 		
 	PRIMARY KEY(Codigo)
 	);
@@ -75,13 +81,11 @@ CREATE TABLE MATERIAL
 
 CREATE TABLE COMPRA
 	(Descripcion		varchar(50)			NOT NULL,
-	Precio				DECIMAL(10,1)		NOT NULL,
-	Fecha_compra		DATE,
-	Lugar_compra		varchar(30),
-	--Cantidad			int					NOT NULL,		
+	Precio				decimal(10,1)		NOT NULL,
+	Fecha_compra		date,
+	Lugar_compra		varchar(30),	
 	Id					int					NOT NULL		IDENTITY(1000,1),
-	Id_etapa			int					NOT NULL,	
-	Id_material			int					NOT NULL,		
+	Id_etapa			int					NOT NULL,		
 
 	PRIMARY KEY(Id)
 	);
@@ -111,7 +115,7 @@ CREATE TABLE EMPLEADO_POR_PROYECTO
 CREATE TABLE OBRERO_POR_PROYECTO
 	(Cedula_obrero		char(9)				NOT NULL,
 	Id_proyecto			int					NOT NULL,
-	Horas_laboradas		DECIMAL(4,1)		NOT NULL,
+	Horas_laboradas		decimal(4,1)		NOT NULL,
 	Semana				date				NOT NULL,
 
 	PRIMARY KEY(Cedula_obrero, Id_proyecto, Semana)
@@ -121,6 +125,7 @@ CREATE TABLE MATERIAL_POR_ETAPA
 	(Codigo_material	int					NOT NULL,
 	Id_etapa			int					NOT NULL,
 	Cantidad			int					NOT NULL,
+	Precio_actual		decimal(10,1)		NOT NULL,
 
 	PRIMARY KEY(Codigo_material,Id_etapa)
 	);
@@ -133,8 +138,7 @@ ALTER TABLE ETAPA
 	ADD FOREIGN KEY (Id_proyecto) REFERENCES PROYECTO(Id)
 
 ALTER TABLE COMPRA
-	ADD FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id),
-		FOREIGN KEY (Id_material) REFERENCES MATERIAL(Codigo)
+	ADD FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
 
 ALTER TABLE ROL_POR_EMPLEADO
 	ADD FOREIGN KEY (Id_empleado) REFERENCES EMPLEADO(Cedula),
@@ -153,98 +157,264 @@ ALTER TABLE MATERIAL_POR_ETAPA
 		FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
 
 GO
-CREATE PROCEDURE dbo.Presupuesto
+CREATE PROCEDURE usp_Presupuesto
 AS
-SELECT
-  MATERIAL.Nombre AS [Nombre Material],
-  MATERIAL_POR_ETAPA.Cantidad AS [Cantidad Material],
-  MATERIAL.Precio_unitario [Precio Unitario],
-  MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario AS [Total],
-  ETAPA.Nombre AS [Nombre Etapa],
-  PROYECTO.Nombre AS [Nombre Proyecto]
-FROM
-  MATERIAL_POR_ETAPA
-  INNER JOIN MATERIAL
-    ON MATERIAL_POR_ETAPA.Codigo_material = MATERIAL.Codigo
-  INNER JOIN ETAPA
-    ON MATERIAL_POR_ETAPA.Id_etapa = ETAPA.Id
-  INNER JOIN PROYECTO
-    ON ETAPA.Id_proyecto = PROYECTO.Id
+BEGIN
+	SELECT
+	  MATERIAL.Nombre AS [Nombre Material],
+	  MATERIAL_POR_ETAPA.Cantidad AS [Cantidad Material],
+	  MATERIAL_POR_ETAPA.Precio_actual AS [Precio],
+	  MATERIAL_POR_ETAPA.Cantidad*MATERIAL_POR_ETAPA.Precio_actual AS [Total],
+	  ETAPA.Nombre AS [Nombre Etapa],
+	  PROYECTO.Nombre AS [Nombre Proyecto]
+	FROM
+	  MATERIAL_POR_ETAPA
+	  INNER JOIN MATERIAL
+		ON MATERIAL_POR_ETAPA.Codigo_material = MATERIAL.Codigo
+	  INNER JOIN ETAPA
+		ON MATERIAL_POR_ETAPA.Id_etapa = ETAPA.Id
+	  INNER JOIN PROYECTO
+		ON ETAPA.Id_proyecto = PROYECTO.Id
+END;
 GO
---DROP PROC Presupuesto;
---Presupuesto;
+--DROP PROC usp_Presupuesto;
+--usp_Presupuesto;
 
 GO
-CREATE PROCEDURE dbo.Planilla
+CREATE PROCEDURE usp_Planilla
 AS
-SELECT
-  OBRERO.Primer_nombre AS [Primer Nombre],
-  OBRERO.Primer_apellido AS [Primer Apellido],
-  OBRERO.Segundo_apellido AS [Segundo Apellido],
-  OBRERO.Pago_por_hora AS [Pago Hora],
-  OBRERO.Cedula AS [Cedula Obrero],
-  OBRERO_POR_PROYECTO.Horas_laboradas AS [Horas Laboradas],
-  OBRERO_POR_PROYECTO.Semana,
-  PROYECTO.Nombre AS [Nombre Proyecto],
-  OBRERO_POR_PROYECTO.Horas_laboradas*OBRERO.Pago_por_hora AS [Total]
-FROM
-  OBRERO_POR_PROYECTO
-  INNER JOIN OBRERO
-    ON OBRERO_POR_PROYECTO.Cedula_obrero = OBRERO.Cedula
-  INNER JOIN PROYECTO
-    ON OBRERO_POR_PROYECTO.Id_proyecto = PROYECTO.Id
+BEGIN
+	SELECT
+	  OBRERO.Primer_nombre AS [Primer Nombre],
+	  OBRERO.Primer_apellido AS [Primer Apellido],
+	  OBRERO.Segundo_apellido AS [Segundo Apellido],
+	  OBRERO.Pago_por_hora AS [Pago Hora],
+	  OBRERO.Cedula AS [Cedula Obrero],
+	  OBRERO_POR_PROYECTO.Horas_laboradas AS [Horas Laboradas],
+	  OBRERO_POR_PROYECTO.Semana,
+	  PROYECTO.Nombre AS [Nombre Proyecto],
+	  OBRERO_POR_PROYECTO.Horas_laboradas*OBRERO.Pago_por_hora AS [Total]
+	FROM
+	  OBRERO_POR_PROYECTO
+	  INNER JOIN OBRERO
+		ON OBRERO_POR_PROYECTO.Cedula_obrero = OBRERO.Cedula
+	  INNER JOIN PROYECTO
+		ON OBRERO_POR_PROYECTO.Id_proyecto = PROYECTO.Id;
+END;
 GO
---DROP PROC Planilla;
---Planilla;
+--DROP PROC usp_Planilla;
+--usp_Planilla;
 
 GO
-CREATE PROCEDURE dbo.Gastos
+CREATE PROCEDURE usp_Gastos
 AS
-SELECT
-  COMPRA.Precio AS [Monto],
-  DATEADD(wk,DATEDIFF(wk,0,Compra.Fecha_compra),0) AS [Semana],
-  COMPRA.Lugar_compra AS [Lugar Compra],
-  COMPRA.Fecha_compra AS [Fecha Compra],
-  ETAPA.Nombre AS [Nombre Etapa],
-  COMPRA.Id AS [Id Compra],
-  PROYECTO.Nombre AS [Nombre Proyecto],
-  PROYECTO.Id AS [Id Proyecto]
-FROM
-  ETAPA
-  INNER JOIN COMPRA
-    ON ETAPA.Id = COMPRA.Id_etapa
-  INNER JOIN PROYECTO
-    ON ETAPA.Id_proyecto = PROYECTO.Id
+BEGIN
+	SELECT
+	  COMPRA.Precio AS [Monto],
+	  DATEADD(wk,DATEDIFF(wk,0,Compra.Fecha_compra),0) AS [Semana],
+	  COMPRA.Lugar_compra AS [Lugar Compra],
+	  COMPRA.Fecha_compra AS [Fecha Compra],
+	  ETAPA.Nombre AS [Nombre Etapa],
+	  COMPRA.Id AS [Id Compra],
+	  PROYECTO.Nombre AS [Nombre Proyecto],
+	  PROYECTO.Id AS [Id Proyecto]
+	FROM
+	  ETAPA
+	  INNER JOIN COMPRA
+		ON ETAPA.Id = COMPRA.Id_etapa
+	  INNER JOIN PROYECTO
+		ON ETAPA.Id_proyecto = PROYECTO.Id;
+END;
 GO
---DROP PROC Gastos;
---Gastos;
+--DROP PROC usp_Gastos;
+--usp_Gastos;
 
+--Store Procedure para reporte de estado financiero
 GO
-CREATE PROCEDURE dbo.Estado
+CREATE PROCEDURE usp_Estado
 AS
+BEGIN
 SELECT
-  ETAPA.Nombre AS [Nombre Etapa],
-  MATERIAL.Precio_unitario,
-  MATERIAL_POR_ETAPA.Cantidad,
-  MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario AS [Presupuesto],
-  COMPRA.Precio AS [Gasto Real],
-  (MATERIAL_POR_ETAPA.Cantidad*MATERIAL.Precio_unitario)-COMPRA.Precio AS [Diferencia],
-  PROYECTO.Nombre AS [Nombre Proyecto]
-FROM
-  ETAPA
-  INNER JOIN PROYECTO
-    ON ETAPA.Id_proyecto = PROYECTO.Id
-  INNER JOIN MATERIAL_POR_ETAPA
-    ON ETAPA.Id = MATERIAL_POR_ETAPA.Id_etapa
-  INNER JOIN MATERIAL
-    ON MATERIAL_POR_ETAPA.Codigo_material = MATERIAL.Codigo
-  INNER JOIN COMPRA
-    ON ETAPA.Id = COMPRA.Id_etapa AND MATERIAL.Codigo = COMPRA.Id_material
-GO
---DROP PROC Estado;
---Estado;
 
-/*USE master
+
+
+--Store Procedure para el registro de empleados
 GO
-DROP DATABASE TECONSTRUYE
-GO*/
+CREATE PROCEDURE usp_registroEmpleado
+	@Primer_nombre		varchar(20),
+	@Primer_apellido	varchar(20),
+	@Segundo_apellido	varchar(20),
+	@Cedula_empleado	char(9),
+	@Telefono_empleado	char(8),
+	@Especialidad		varchar(30),
+	@Id_rol				int
+AS
+INSERT INTO [EMPLEADO]
+    ([Primer_nombre],
+	[Primer_apellido],
+	[Segundo_apellido],	
+	[Cedula],
+	[Telefono],
+	[Especialidad])
+VALUES
+    (@Primer_nombre,
+	@Primer_apellido,
+	@Segundo_apellido,
+	@Cedula_empleado,
+	@Telefono_empleado,
+	@Especialidad)
+
+INSERT INTO [ROL_POR_EMPLEADO]
+	([Id_empleado],
+	[Id_rol])
+VALUES
+	(@Cedula_empleado,
+	@Id_rol)
+GO
+--DROP PROC ups_registroEmpleado;
+--usp_registroEmpleado 'Arturo','Cordoba','Villalobos','987654321','84579658','Ingeniero Electrico',2;
+
+--Store Procedure para el registro de clientes
+GO
+CREATE PROCEDURE usp_registroCliente
+	@Primer_nombre		varchar(20),
+	@Primer_apellido	varchar(20),
+	@Segundo_apellido	varchar(20),
+	@Cedula_cliente		char(9),
+	@Telefono_cliente	char(8)
+AS
+INSERT INTO [CLIENTE]	
+	([Primer_nombre],
+	[Primer_apellido],
+	[Segundo_apellido],
+	[Cedula],
+	[Telefono])
+VALUES
+	(@Primer_nombre,
+	@Primer_apellido,
+	@Segundo_apellido,
+	@Cedula_cliente,
+	@Telefono_cliente)
+GO
+--DROP PROC usp_registoCliente;
+--usp_registroCliente 'Fabian','Gonzalez','Araya','456789123','82174596';
+
+--Store Procedure para el registro de obreros
+GO
+CREATE PROCEDURE usp_registroObrero
+	@Primer_nombre		varchar(20),
+	@Primer_apellido	varchar(20),
+	@Segundo_apellido	varchar(20),
+	@Cedula_obrero		char(9),
+	@Telefono_obrero	char(8),
+	@Pago_por_hora		decimal(8,1)
+AS
+INSERT INTO [OBRERO]
+	([Primer_nombre],
+	[Primer_apellido],
+	[Segundo_apellido],
+	[Cedula],
+	[Telefono],
+	[Pago_por_hora])
+VALUES
+	(@Primer_nombre,
+	@Primer_apellido,
+	@Segundo_apellido,
+	@Cedula_obrero,
+	@Telefono_obrero,
+	@Pago_por_hora)
+GO
+--DROP PROC usp_registroObrero;
+--usp_registroObrero 'Anthony','Loaiza','Rosales','321654987','89741230',1000;
+
+--Store Procedure para el registro de materiales
+GO
+CREATE PROCEDURE usp_registroMaterial
+	@Nombre_material	varchar(20),
+	@Precio_unitario	decimal(10,1)
+AS
+INSERT INTO [MATERIAL]
+	([Nombre],
+	[Precio_unitario])
+VALUES
+	(@Nombre_material,
+	@Precio_unitario)
+GO
+--DROP PROC usp_registroMaterial;
+--usp_registroMaterial 'Zacate',8000;
+
+--Store Procedure para el registro de etapas
+GO
+CREATE PROCEDURE usp_registroEtapa
+	@Nombre_etapa 		varchar(30),
+	@Id_proyecto		int,
+	@Fecha_inicio		date,
+	@Fecha_final		date
+AS
+INSERT INTO [ETAPA]
+	([Nombre],
+	[Id_proyecto],
+	[Fecha_inicio],
+	[Fecha_final])
+VALUES
+	(@Nombre_etapa,
+	@Id_proyecto,
+	@Fecha_inicio,
+	@Fecha_final)
+GO
+--DROP PROC usp_registroEtapa;
+--usp_registroEtapa 'Jardin',1000,'2018/7/20','2018/7/22';
+
+
+/*
+--Store Procedure para el registro de proyecto
+GO
+CREATE PROCEDURE usp_registroProyecto
+	@Nombre_proyecto	varchar(20),
+	@Estado_proyecto	varchar(10),
+	@Ubicacion			varchar(40),
+	@Fecha_inicio		date,
+	@Cedula_cliente		char(9),
+	@Cedula_empleado	char(9),
+AS
+INSERT INTO [PROYECTO]
+	([Nombre],
+	[Estado],
+	[Ubicacion],
+	[Fecha_inicio],
+	[Cedula_cliente]
+--Ingresar varios empleados en un parametro
+*/
+--DROP PROC usp_registroProyecto;
+--
+
+--Store Procedure para asignar cantidad y material a cada etapa
+GO
+CREATE PROCEDURE usp_asignarMaterialEtapa
+	@Codigo_material	int,
+	@Id_etapa		int,
+	@Cantidad_material	int
+AS
+INSERT INTO [MATERIAL_POR_ETAPA]
+	([Codigo_material],
+	[Id_etapa],
+	[Cantidad])
+VALUES
+	(@Codigo_material,
+	@Id_etapa,
+	@Cantidad_material)
+GO
+--DROP PROC usp_asignarMaterialEtapa
+--usp_asignarMaterialEtapa 1029,1026,10;
+
+--Store Procedure para generacion de presupuesto
+/*
+--Store Procedure para asignar horas de un obrero a un proyecto
+GO
+CREATE PROCEDURE usp_asignarObreroProyecto
+	@Cedula_obrero		char(9),
+	@Id_proyecto		int,
+	@Horas_laboradas	decimal(4,1),
+	@Semana				date
+AS
+INSERT INTO [OBRERO_POR_PROYECTO]*/
