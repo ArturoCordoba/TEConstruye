@@ -132,7 +132,9 @@ CREATE TABLE MATERIAL
 	Descripcion: string que representa la descripcion general de la compra
 	Precio: string que representa el precio del gasto total de la compra
 	Fecha_compra: fecha que representa la fecha de compra
-	Lugar_compra: 
+	Lugar_compra: string que representa el lugar donde se realizo la compra
+	Id: valor numerico identificador de la compra (llave primaria)
+	Id_etapa: valor numerico identificador de la etapa qque pertenece la compra
 */
 CREATE TABLE COMPRA
 	(Descripcion		varchar(50)			NOT NULL,
@@ -145,14 +147,24 @@ CREATE TABLE COMPRA
 	PRIMARY KEY(Id),
 	CHECK(Precio>0)
 	);
-
+	
+/*Creacion de la tabla de roles
+  Atributos:
+  	Id: valor numreico identificador del rol (llave primaria)
+	Nombre: string que representa el nombre del rol
+*/
 CREATE TABLE ROL
 	(Id					int					NOT NULL		IDENTITY(1,1),
 	Nombre				varchar(20)			NOT NULL,
 	
 	PRIMARY KEY(Id)
 	);
-	
+
+/*Creacion de la tabla de roles por empleado
+  Atributos:
+  	Id_empleado: string que representa el numero de cedula del empleado (llave primaria)
+	Id_rol: valor numerico identificador del rol del empleado (llave primaria)
+*/
 CREATE TABLE ROL_POR_EMPLEADO
 	(Id_empleado		char(9)				NOT NULL,
 	Id_rol				int					NOT NULL,
@@ -160,6 +172,11 @@ CREATE TABLE ROL_POR_EMPLEADO
 	PRIMARY KEY(Id_empleado,Id_rol)
 	);		
 
+/*Creacion de la tabla de empleados por proyecto
+  Atributos:
+  	Cedula_empleado: string que representa el numero de cedula del empleado (llave primaria)
+	Id_proyecto: valor numerico identificador del proyecto al que pertenece el empleado (llave primaria)
+*/
 CREATE TABLE EMPLEADO_POR_PROYECTO
 	(Cedula_empleado	char(9)				NOT NULL,
 	Id_proyecto			int					NOT NULL,
@@ -167,7 +184,13 @@ CREATE TABLE EMPLEADO_POR_PROYECTO
 	PRIMARY KEY(Cedula_empleado, Id_proyecto)
 	);
 
-
+/*Creacion de la tabla de obreros por proyecto
+  Atributos:
+  	Cedula_obrero: string que representa el numero de cedula del obrero (llave primaria)
+	Id_proyecto: valor numerico identificador del proyecto al que pertenece el obrero (llave primaria)
+	Horas_laboradas: valor numerico que representa el numero de horas que trabajo el obrero por semana
+	Semana: fecha inicial de la semana en la que trabajo el obrero (llave primaria)
+*/
 CREATE TABLE OBRERO_POR_PROYECTO
 	(Cedula_obrero		char(9)				NOT NULL,
 	Id_proyecto			int					NOT NULL,
@@ -178,6 +201,13 @@ CREATE TABLE OBRERO_POR_PROYECTO
 	CHECK(Horas_laboradas>0)
 	);
 
+/*Creacion de la tabla de materiales por etapa
+  Atributos:
+  	Codigo_material: valor numerico que representa el codigo del material (llave primaria)
+	Id_etapa: valor numerico identificador de la etapa a la que pertenece el material (llave primaria)
+	Cantidad: valor numerico que representa la cantidad de material de la etapa
+	Precio_actual: valor numerico que representa el precio actual del material
+*/
 CREATE TABLE MATERIAL_POR_ETAPA
 	(Codigo_material	int					NOT NULL,
 	Id_etapa			int					NOT NULL,
@@ -190,6 +220,7 @@ CREATE TABLE MATERIAL_POR_ETAPA
 	);
 
 
+--Creacion de las llaves foraneas para cada tabla
 ALTER TABLE PROYECTO
 	ADD FOREIGN KEY (Cedula_cliente) REFERENCES CLIENTE(Cedula)
 
@@ -215,6 +246,7 @@ ALTER TABLE MATERIAL_POR_ETAPA
 	ADD FOREIGN KEY (Codigo_material) REFERENCES MATERIAL(Codigo),
 		FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
 
+--Store Procedure para el reporte del presupuesto
 GO
 CREATE PROCEDURE usp_Presupuesto
 AS
@@ -239,6 +271,8 @@ GO
 --DROP PROC usp_Presupuesto;
 --usp_Presupuesto;
 
+
+--Store Procedure para el reporte de planilla
 GO
 CREATE PROCEDURE usp_Planilla
 AS
@@ -264,6 +298,8 @@ GO
 --DROP PROC usp_Planilla;
 --usp_Planilla;
 
+
+--Store procedure para el reporte de gastos
 GO
 CREATE PROCEDURE usp_Gastos
 AS
@@ -289,6 +325,7 @@ GO
 --DROP PROC usp_Gastos;
 --usp_Gastos;
 
+--Creacion de vista del presupuesto total por etapa
 GO
 CREATE VIEW Presupuesto_por_etapa
 AS SELECT 
@@ -302,6 +339,7 @@ AS SELECT
 
     GROUP BY PROYECTO.Nombre,PROYECTO.Id,ETAPA.Nombre,ETAPA.Id
 
+--Creacion de vista del gasto total por etapa
 GO
 CREATE VIEW Gasto_por_etapa
 AS SELECT
@@ -312,7 +350,7 @@ AS SELECT
                  INNER JOIN COMPRA ON ETAPA.Id = COMPRA.Id_etapa
     GROUP BY ETAPA.Nombre,ETAPA.Id 
 
-
+--Creacion del store procedure para el reporte de estado financiero
 GO
 CREATE PROCEDURE usp_Estado
 AS
@@ -330,6 +368,7 @@ BEGIN
 
 END;
 GO
+--DROP PROC usp_Estado;
 --usp_Estado;
 
 
