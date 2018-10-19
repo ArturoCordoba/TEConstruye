@@ -1,6 +1,9 @@
+--Script DML del proyecto TEConstruye
+
 USE TECONSTRUYE
 GO
 
+--Inserciones en la tabla de empleado
 INSERT INTO EMPLEADO (Primer_Nombre, Primer_Apellido, Segundo_Apellido, Cedula, Telefono, Especialidad)
 VALUES
 ('Anthonny','Loaiza','Rosales','116950116','85621439','Ingeniero Civil'),
@@ -13,7 +16,7 @@ VALUES
 ('Gerardo','Muñoz','Artavia','782950458','88921245','Ingeniero Construccion')
 ;
 
-
+--Inserciones en la tabla de obrero
 INSERT INTO OBRERO (Primer_nombre, Primer_apellido, Segundo_apellido, Cedula, Telefono, Pago_por_hora)
 VALUES
 ('Ricardo','Montoya','Arrieta','103202101','85878889',1000),
@@ -33,7 +36,7 @@ VALUES
 ('Antonio','Muñoz','Soto','163202101','88493407',1500)
 ;
 
-
+--Inserciones en la tabla de cliente
 INSERT INTO CLIENTE (Primer_nombre, Primer_apellido, Segundo_apellido, Cedula, Telefono)
 VALUES
 ('Carlos','Calvo','Marin','116401303','83854017'),
@@ -43,7 +46,7 @@ VALUES
 ('Lorena','Roca','Arias','116405303','86854421')
 ;
 
-
+--Inserciones en la tabla de proyecto
 INSERT INTO PROYECTO (Nombre, Estado, Ubicacion, Fecha_inicio, Cedula_cliente)
 VALUES
 ('Casa H34','Finalizado','Santa Ana','2018/6/1','116401303'),
@@ -54,6 +57,7 @@ VALUES
 ('Casa B03','Pendiente','San Rafael','2019/2/10','116405303')
 ;
 
+--Inserciones en la tabla de etapa
 INSERT INTO ETAPA (Nombre, Descripcion, Fecha_inicio, Fecha_final, Id_proyecto)
 VALUES
 
@@ -89,6 +93,7 @@ VALUES
 ('Cimientos','Etapa de cimentacion de la construccion','2018/10/1','2018/10/13',1002)
 ;
 
+--Inserciones en la tabla de material
 INSERT INTO MATERIAL (Nombre, Precio_unitario)
 VALUES
 ('Piedra', 200),
@@ -122,6 +127,7 @@ VALUES
 ('Pintura Cafe', 7000)
 ;
 
+--Inserciones en la tabla de rol
 INSERT INTO ROL(Nombre)
 VALUES
 ('Administrador'),
@@ -129,6 +135,7 @@ VALUES
 ('Arquitecto')
 ;
 
+--Inserciones en la tabla de roles por empleado
 INSERT INTO ROL_POR_EMPLEADO(Id_empleado,Id_rol)
 VALUES
 ('116800684',1),
@@ -142,6 +149,7 @@ VALUES
 ('782950458',1)
 ;
 
+--Inserciones en la tabla de compra
 INSERT INTO COMPRA (Descripcion, Precio, Fecha_compra, Lugar_compra, Id_etapa)
 VALUES
 
@@ -235,6 +243,7 @@ VALUES
 --Etapa Cimientos preliminar del proyecto 1002
 ('Bolsas de cemento para los cimientos',85000,'2018-09-21','Las Gravilias',1024)
 
+--Inserciones en la tabla de material por etapa
 INSERT INTO MATERIAL_POR_ETAPA (Codigo_Material, Id_etapa, Cantidad, Precio_actual)
 VALUES
 
@@ -329,6 +338,7 @@ VALUES
 (1005,1024,8,10000)
 ;
 
+--Inserciones en la tabla de empleados por proyecto
 INSERT INTO EMPLEADO_POR_PROYECTO (Cedula_empleado, Id_proyecto)
 VALUES
 ('116950116',1000),
@@ -345,111 +355,150 @@ VALUES
 ('216950116',1005)
 ;
 
+--Inserciones en la tabla de obreros por proyecto
 INSERT INTO OBRERO_POR_PROYECTO (Cedula_obrero, Id_proyecto, Semana, Horas_laboradas)
 VALUES
+
+--Semana 1 del proyecto 1000
 ('103202101',1000,'2018/6/4',37),
 ('203202101',1000,'2018/6/4',34),
 ('303202101',1000,'2018/6/4',33),
 ('403202101',1000,'2018/6/4',32),
 ('503202101',1000,'2018/6/4',36),
+
+--Semana 2 del proyecto 1000
 ('103202101',1000,'2018/6/11',35),
 ('203202101',1000,'2018/6/11',35),
 ('303202101',1000,'2018/6/11',31),
 ('403202101',1000,'2018/6/11',33),
 ('503202101',1000,'2018/6/11',35),
+
+--Semana 3 del proyecto 1000
 ('103202101',1000,'2018/6/18',37),
 ('203202101',1000,'2018/6/18',34),
 ('303202101',1000,'2018/6/18',33),
 ('403202101',1000,'2018/6/18',32),
 ('503202101',1000,'2018/6/18',36),
+
+--Semana 4 del proyecto 1000
 ('103202101',1000,'2018/6/25',35),
 ('203202101',1000,'2018/6/25',35),
 ('303202101',1000,'2018/6/25',31),
 ('403202101',1000,'2018/6/25',33),
 ('503202101',1000,'2018/6/25',35),
+
+--Semana 5 del proyecto 1000
 ('103202101',1000,'2018/7/2',37),
 ('203202101',1000,'2018/7/2',34),
 ('303202101',1000,'2018/7/2',33),
 ('403202101',1000,'2018/7/2',32),
 ('503202101',1000,'2018/7/2',36),
+
+--Semana 6 del proyecto 1000
 ('103202101',1000,'2018/7/9',35),
 ('203202101',1000,'2018/7/9',35),
 ('303202101',1000,'2018/7/9',31),
 ('403202101',1000,'2018/7/9',33),
 ('503202101',1000,'2018/7/9',35),
+
+--Semana 7 del proyecto 1000
 ('103202101',1000,'2018/7/16',37),
 ('203202101',1000,'2018/7/16',34),
 ('303202101',1000,'2018/7/16',33),
 ('403202101',1000,'2018/7/16',32),
 ('503202101',1000,'2018/7/16',36),
+
+--Semana 8 del proyecto 1000
 ('103202101',1000,'2018/7/23',35),
 ('203202101',1000,'2018/7/23',35),
 ('303202101',1000,'2018/7/23',31),
 ('403202101',1000,'2018/7/23',33),
 ('503202101',1000,'2018/7/23',35),
+
+--Semana 9 del proyecto 1000
 ('103202101',1000,'2018/7/30',37),
 ('203202101',1000,'2018/7/30',34),
 ('303202101',1000,'2018/7/30',33),
 ('403202101',1000,'2018/7/30',32),
 ('503202101',1000,'2018/7/30',36),
+
+--Semana 10 del proyecto 1000
 ('103202101',1000,'2018/8/6',35),
 ('203202101',1000,'2018/8/6',35),
 ('303202101',1000,'2018/8/6',31),
 ('403202101',1000,'2018/8/6',33),
 ('503202101',1000,'2018/8/6',35),
+
+--Semana 11 del proyecto 1000
 ('103202101',1000,'2018/8/13',37),
 ('203202101',1000,'2018/8/13',34),
 ('303202101',1000,'2018/8/13',33),
 ('403202101',1000,'2018/8/13',32),
 ('503202101',1000,'2018/8/13',36),
+
+--Semana 12 del proyecto 1000
 ('103202101',1000,'2018/8/20',28),
 ('203202101',1000,'2018/8/20',27),
 ('303202101',1000,'2018/8/20',26),
 ('403202101',1000,'2018/8/20',28),
 ('503202101',1000,'2018/8/20',29),
+
+--Semana 1 del proyecto 1001
 ('603202101',1001,'2018/9/17',28),
 ('703202101',1001,'2018/9/17',27),
 ('803202101',1001,'2018/9/17',26),
 ('903202101',1001,'2018/9/17',28),
 ('113202101',1001,'2018/9/17',29),
+
+--Semana 2 del proyecto 1001
 ('603202101',1001,'2018/9/24',35),
 ('703202101',1001,'2018/9/24',35),
 ('803202101',1001,'2018/9/24',31),
 ('903202101',1001,'2018/9/24',33),
 ('113202101',1001,'2018/9/24',35),
+
+--Semana 3 del proyecto 1001
 ('603202101',1001,'2018/10/1',37),
 ('703202101',1001,'2018/10/1',34),
 ('803202101',1001,'2018/10/1',33),
 ('903202101',1001,'2018/10/1',32),
 ('113202101',1001,'2018/10/1',36),
+
+--Semana 4 del proyecto 1001
 ('603202101',1001,'2018/10/8',35),
 ('703202101',1001,'2018/10/8',35),
 ('803202101',1001,'2018/10/8',31),
 ('903202101',1001,'2018/10/8',33),
 ('113202101',1001,'2018/10/8',35),
+
+--Semana 5 del proyecto 1001
 ('603202101',1001,'2018/10/15',28),
 ('703202101',1001,'2018/10/15',27),
 ('803202101',1001,'2018/10/15',26),
 ('903202101',1001,'2018/10/15',28),
 ('113202101',1001,'2018/10/15',29),
+
+--Semana 1 del proyecto 1002
 ('123202101',1002,'2018/9/24',8),
 ('133202101',1002,'2018/9/24',5),
 ('143202101',1002,'2018/9/24',6),
 ('153202101',1002,'2018/9/24',6),
 ('163202101',1002,'2018/9/24',7),
+
+--Semana 2 del proyecto 1002
 ('123202101',1002,'2018/10/1',35),
 ('133202101',1002,'2018/10/1',35),
 ('143202101',1002,'2018/10/1',31),
 ('153202101',1002,'2018/10/1',33),
 ('163202101',1002,'2018/10/1',35),
+
+--Semana 3 del proyecto 1002
 ('123202101',1002,'2018/10/8',28),
 ('133202101',1002,'2018/10/8',27),
 ('143202101',1002,'2018/10/8',26),
 ('153202101',1002,'2018/10/8',28),
 ('163202101',1002,'2018/10/8',29)
 ;
-
-
 
 /*
 SELECT * FROM EMPLEADO;
