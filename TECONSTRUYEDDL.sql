@@ -765,3 +765,28 @@ END;
 GO
 --DROP PROC usp_consultarMaterialesEtapa;
 --usp_consultarMaterialesEtapa;
+
+--Trigger que evita un drop table
+GO 
+CREATE TRIGGER prevenirDropTable
+ON DATABASE FOR DROP_TABLE
+AS
+BEGIN
+	RAISERROR('Unauthorized DROP TABLE',10,1)
+	ROLLBACK;
+END;
+--DROP TRIGGER prevenirDropTable
+--DROP TABLE ROL_POR_EMPLEADO;
+
+--Trigger que evita un drop database
+GO
+CREATE TRIGGER prevenirDropDatabase
+ON ALL SERVER FOR DROP_DATABASE
+AS
+BEGIN
+	RAISERROR('Unauthorized DROP DATABASE',16,1)
+	ROLLBACK;
+END;
+--DROP TRIGGER prevenirDropDatabase
+--DROP DATABASE TECONSTRUYE
+
