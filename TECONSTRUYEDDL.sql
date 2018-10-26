@@ -1,3 +1,5 @@
+--Script DDL del proyecto TEConstruye
+
 --Creacion de la base de datos de TEConstruye
 CREATE DATABASE TECONSTRUYE
 GO
@@ -246,18 +248,18 @@ ALTER TABLE MATERIAL_POR_ETAPA
 	ADD FOREIGN KEY (Codigo_material) REFERENCES MATERIAL(Codigo),
 		FOREIGN KEY (Id_etapa) REFERENCES ETAPA(Id)
 
---Store Procedure para el reporte del presupuesto
+
+--Vista para el reporte de presupuesto
 GO
-CREATE PROCEDURE usp_Presupuesto
+CREATE VIEW Presupuesto
 AS
-BEGIN
 	SELECT
-	  MATERIAL.Nombre AS [Nombre Material],
-	  MATERIAL_POR_ETAPA.Cantidad AS [Cantidad Material],
+	  MATERIAL.Nombre AS [Nombre_Material],
+	  MATERIAL_POR_ETAPA.Cantidad AS [Cantidad_Material],
 	  MATERIAL_POR_ETAPA.Precio_actual AS [Precio],
 	  MATERIAL_POR_ETAPA.Cantidad*MATERIAL_POR_ETAPA.Precio_actual AS [Total],
-	  ETAPA.Nombre AS [Nombre Etapa],
-	  PROYECTO.Nombre AS [Nombre Proyecto]
+	  ETAPA.Nombre AS [Nombre_Etapa],
+	  PROYECTO.Nombre AS [Nombre_Proyecto]
 	FROM
 	  MATERIAL_POR_ETAPA
 	  INNER JOIN MATERIAL
@@ -266,26 +268,21 @@ BEGIN
 		ON MATERIAL_POR_ETAPA.Id_etapa = ETAPA.Id
 	  INNER JOIN PROYECTO
 		ON ETAPA.Id_proyecto = PROYECTO.Id
-END;
 GO
---DROP PROC usp_Presupuesto;
---usp_Presupuesto;
 
-
---Store Procedure para el reporte de planilla
+--Vista para el reporte de planilla
 GO
-CREATE PROCEDURE usp_Planilla
+CREATE VIEW Planilla
 AS
-BEGIN
 	SELECT
-	  OBRERO.Primer_nombre AS [Primer Nombre],
-	  OBRERO.Primer_apellido AS [Primer Apellido],
-	  OBRERO.Segundo_apellido AS [Segundo Apellido],
-	  OBRERO.Pago_por_hora AS [Pago Hora],
-	  OBRERO.Cedula AS [Cedula Obrero],
-	  OBRERO_POR_PROYECTO.Horas_laboradas AS [Horas Laboradas],
+	  OBRERO.Primer_nombre AS [Primer_Nombre],
+	  OBRERO.Primer_apellido AS [Primer_Apellido],
+	  OBRERO.Segundo_apellido AS [Segundo_Apellido],
+	  OBRERO.Pago_por_hora AS [Pago_Hora],
+	  OBRERO.Cedula AS [Cedula_Obrero],
+	  OBRERO_POR_PROYECTO.Horas_laboradas AS [Horas_Laboradas],
 	  OBRERO_POR_PROYECTO.Semana,
-	  PROYECTO.Nombre AS [Nombre Proyecto],
+	  PROYECTO.Nombre AS [Nombre_Proyecto],
 	  OBRERO_POR_PROYECTO.Horas_laboradas*OBRERO.Pago_por_hora AS [Total]
 	FROM
 	  OBRERO_POR_PROYECTO
@@ -293,39 +290,30 @@ BEGIN
 		ON OBRERO_POR_PROYECTO.Cedula_obrero = OBRERO.Cedula
 	  INNER JOIN PROYECTO
 		ON OBRERO_POR_PROYECTO.Id_proyecto = PROYECTO.Id;
-END;
 GO
---DROP PROC usp_Planilla;
---usp_Planilla;
 
-
---Store procedure para el reporte de gastos
+--Vista para el reporte de gastos
 GO
-CREATE PROCEDURE usp_Gastos
+CREATE VIEW Gastos
 AS
-BEGIN
 	SELECT
 	  COMPRA.Precio AS [Monto],
 	  DATEADD(wk,DATEDIFF(wk,0,Compra.Fecha_compra),0) AS [Semana],
-	  COMPRA.Lugar_compra AS [Lugar Compra],
-	  COMPRA.Fecha_compra AS [Fecha Compra],
-	  ETAPA.Nombre AS [Nombre Etapa],
-	  COMPRA.Id AS [Id Compra],
-	  PROYECTO.Nombre AS [Nombre Proyecto],
-	  PROYECTO.Id AS [Id Proyecto]
+	  COMPRA.Lugar_compra AS [Lugar_Compra],
+	  COMPRA.Fecha_compra AS [Fecha_Compra],
+	  ETAPA.Nombre AS [Nombre_Etapa],
+	  COMPRA.Id AS [Id_Compra],
+	  PROYECTO.Nombre AS [Nombre_Proyecto],
+	  PROYECTO.Id AS [Id_Proyecto]
 	FROM
 	  ETAPA
 	  INNER JOIN COMPRA
 		ON ETAPA.Id = COMPRA.Id_etapa
 	  INNER JOIN PROYECTO
 		ON ETAPA.Id_proyecto = PROYECTO.Id
-	ORDER BY Etapa.Id;
-END;
 GO
---DROP PROC usp_Gastos;
---usp_Gastos;
 
---Creacion de vista del presupuesto total por etapa
+--Vista del presupuesto total por etapa
 GO
 CREATE VIEW Presupuesto_por_etapa
 AS SELECT 
@@ -339,7 +327,7 @@ AS SELECT
 
     GROUP BY PROYECTO.Nombre,PROYECTO.Id,ETAPA.Nombre,ETAPA.Id
 
---Creacion de vista del gasto total por etapa
+--Vista del gasto total por etapa
 GO
 CREATE VIEW Gasto_por_etapa
 AS SELECT
@@ -350,27 +338,22 @@ AS SELECT
                  INNER JOIN COMPRA ON ETAPA.Id = COMPRA.Id_etapa
     GROUP BY ETAPA.Nombre,ETAPA.Id 
 
---Creacion del store procedure para el reporte de estado financiero
+
+--Vista del para el reporte de estado financiero
 GO
-CREATE PROCEDURE usp_Estado
+CREATE VIEW Estado
 AS
-BEGIN
-    SELECT
-        Nombre_proyecto, 
-        Proyecto_id,
-        Nombre_etapa,
-        Id_etapa,
-        Presupuesto,
-        Gasto_real AS [Gasto Real],
-		Presupuesto-Gasto_real AS [Diferencia] 
-    FROM 
+	SELECT
+		Nombre_proyecto AS [Nombre_Proyecto],
+		Proyecto_id AS [Id_Proyecto],
+		Nombre_etapa AS [Nombre_Etapa],
+		Id_etapa AS [Id_Etapa],
+		Presupuesto,
+		Gasto_real AS [Gasto_Real],
+		Presupuesto-Gasto_real AS [Diferencia]
+	FROM 
         Presupuesto_por_etapa INNER JOIN Gasto_por_etapa ON Id_etapa = Etapa_id
-
-END;
 GO
---DROP PROC usp_Estado;
---usp_Estado;
-
 
 --Store Procedure para el registro de empleados
 GO
@@ -511,7 +494,6 @@ END;
 GO
 --DROP PROC usp_registroEtapa;
 --usp_registroEtapa 'Jardin','Etapa de instalacion de jardin',1000,'2018/7/20','2018/7/22';
-
 
 
 --Store Procedure para el registro de proyecto
@@ -766,6 +748,7 @@ GO
 --DROP PROC usp_consultarMaterialesEtapa;
 --usp_consultarMaterialesEtapa;
 
+
 --Trigger que evita un drop table
 GO 
 CREATE TRIGGER prevenirDropTable
@@ -789,4 +772,3 @@ BEGIN
 END;
 --DROP TRIGGER prevenirDropDatabase ON ALL SERVER
 --DROP DATABASE TECONSTRUYE
-
